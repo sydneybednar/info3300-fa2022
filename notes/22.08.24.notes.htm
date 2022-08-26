@@ -128,22 +128,38 @@
       // Learn more at https://www.freecodecamp.org/news/js-type-coercion-explained-27ba3d9a2839/
       // Why does this matter?
       
+      // let color = dict.color;
+      // document.getElementById("rectangle").setAttribute("fill", color);
       
       
       
       // Comparison weirdness
       // console.log("--- Now trying some comparisons ---")
+      console.log( (true + 1) == "2" );
+      console.log( 0 == "0" );
+      console.log( [] == 0 );
+      console.log( [1] == true );
+      console.log( [[]] == 0 );
+      console.log( [[]] == [] );  // coercion doesn't happen here, so they are unequal
       
+      console.log( 'Explicit comparison', '0' === 0 );
       
-      
-      
+      // Null and undefined can cause unusual behaviors too
+      console.log( 6 + null );
+      console.log( 6 + undefined);
+      console.log( null === 0 );
+      console.log( null === undefined );
+      console.log( NaN === NaN );
+      console.log( [1,2,3] === [1,2,3] );  // not equal because they are 2 different objects
+                                           // to check that the lists are equivalent, use a built-in function or a loop
 
       // Shortcircuiting of logical statements
-      // console.log("--- Shortcircuiting ---");
-
-
-
-
+      console.log("--- Shortcircuiting ---");
+      true || console.log("logged-or") || false
+      true && console.log("logged-and") && false
+      false && console.log("logged-not-and") && true
+      
+      
     </script>
 
 
@@ -151,20 +167,6 @@
     
       // How do two script tags interact with each other?
       let test = "script tags. how do they work?";
-      
-      
-      // * Let's talk JSON
-      
-      
-
-      // let obj = [{"name":"DDWA", "number":3300 },{"name": "Java", "number": 2110},{"name": "Python", "number": 1110}];
-      // console.log(obj);
-      
-
-
-      // This one won't parse because it breaks JSON specifications
-      // let badStr = '{"list": ["commas,", "single_quo\'tes", "double_quo"tes", "@sÃ§i|"], "nestedObject": {"undefined": undefined, "defined": 3.1415926535}, "Infinity": Infinity, "NaN": NaN, "bool": true}'
-      
       
       
       
