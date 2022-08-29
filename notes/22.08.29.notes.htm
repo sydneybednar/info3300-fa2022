@@ -48,7 +48,33 @@
     
     <!--- SVG goes here! --->
     
-    
+    <svg height=500 width=500 style="border:1px solid black; margin-bottom:50px;">
+      
+      <circle cx=150 
+              cy=49 
+              r=30 
+              fill="purple" />
+              
+      <line x1=150 
+            y1=49 
+            x2=450 
+            y2=450 
+            stroke="steelblue" 
+            stroke-width=3 />
+            
+      <rect x=100 
+            y=30 
+            height=300 
+            width=200 
+            style="fill:forestgreen; stroke:darkviolet; stroke-width:10; opacity:0.6;" />
+            
+      <text x=100 
+            y=280 
+            style="font: bold 20px sans-serif;"
+            dominant-baseline=hanging
+            text-anchor=middle>HELLO</text>
+      
+    </svg>
 
 
     <h3>Paths</h3>
@@ -81,8 +107,15 @@
       <path style="stroke:#ccc; stroke-width:1" d="M 180 0 V 200" />
 
       <!--- Now let's draw a polygon --->
+      <!-- First one:  "Move to (10,10); put pen down and draw a horizontal line until x=50; draw a vertical line until y=30; draw a line to point (30,60); close the path by returning to the starting point" --->
+      <path style="stroke: limegreen; stroke-width:3px; fill: plum" 
+            d="M 10 10 H 50 V 30 L 30 60 Z" />
+            
+      <!-- Second one:  "Move to (50,50); put pen down and draw a horizontal line *that is 50px long*; draw a line to point (80,70); draw a line to point (100,90); draw a horizontal line until x=50; close the path by returning to the starting point" --->
+      <path style="stroke: orange; stroke-width:3px; fill: magenta" 
+            d="M 50 50 h 50 L 80 70 L 100 90 H 50 Z" />
       
-      
+      <!--- Try making your own here! --->
       
       
       
