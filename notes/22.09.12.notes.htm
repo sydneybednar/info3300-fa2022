@@ -55,11 +55,28 @@
   <!--- Code for today's class --->
   <script id="notes">
   
+    // Quick notes on paths:
+    //    / -> enter a directory
+    //    . -> this directory
+    //    .. -> go up a directory
+    // Simple web servers have an annoying (but technically accurate) behavior that can affect your homework
+    // They often ignore .. if you're at the root of a web server directory
+    // So if your path reads as ../titanic.json  (go up one directory, then look for titanic.json)
+    //  then it will still appear to work if you run a web server, because they just say "welp, I can't go 
+    //  up a directory so I'll just look here" and interpret the path as ./titanic.json
+    // However, when a grader runs a web server, they run it in a directory containing many students' work
+    // So the bad .. in your path actually works, pointing to a place where titanic.json *does not exist*
+    // But your homework may appear to work on your own computer, because your web server ignored ..
+    // Don't put .. in your path unless you really, truly, mean it!
+    // If you intend to say "look for titanic.json in the same place as your index.html file," then
+    //  just use 'titanic.json' or './titanic.json' as your path and keep it simple
+  
     // --- 1
-    //  '../datasets/titanic.json'
+    //  '../datasets/titanic.json' ---> "go up a directory (because we are in /notes/), then go to datasets,
+    //                                     then look for titanic.json in that directory
     console.log( '---Top of file---' );
-                  
-    
+    console.log( d3.json( "../datasets/titanic.json" ) );
+    console.log( 'When will this print?' );
     
 
     // --- 2

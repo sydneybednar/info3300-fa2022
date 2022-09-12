@@ -87,9 +87,13 @@
     .range([10,width-10]); // We want to space things inwards a bit
   // d3.scaleLinear() returns a FUNCTION which we then assign to ageScale (because functions are also objects in JS). This allows us to call ageScale(number)
 
+  
+    let maxMortality = d3.max( passengers, d => Math.max( d.lived, d.died ) );
+    console.log(maxMortality);
+
   let livedScale = d3.scaleLinear()
                      //.domain([0,200]) // We started by picking an arbitrary max number by guess
-                     .domain([0,200]) // At the end of class we noticed this was a bad idea
+                     .domain([0,maxMortality]) // At the end of class we noticed this was a bad idea
                      .range([0, height/2.0]); // Let's end in the middle
                       // inverting range will alleviate the strange math in .attr(y2)
                       
@@ -120,7 +124,7 @@
 
   let diedScale = d3.scaleLinear()
                     //.domain([0,200]) // We started by picking an arbitrary max number by guess
-                    .domain([0, 200]) // Bad idea to hardcode these
+                    .domain([0, maxMortality]) // Bad idea to hardcode these
                     .range([0, height/2.0]); // Let's start in the middle
 
   passengers.forEach( (d, i) => {
@@ -138,22 +142,106 @@
   //  hint: check out d3.min, d3.max, and d3.extent in the API docs
     
 
-    // --- 3. Let's break the data down by gender now!
-    
-    
-    
-    
-    
-    
+  // --- 3. Let's break the data down by gender now!
+  
+  // One thing we'll do often is make some new data by looping through our dataset
+  // Here we'll construct a % survived metric for each age band
+  passengersMale.forEach(  d => {
+    // We initially just had this
+    // d.percentSurvived = d.lived / (d.lived + d.died);
+    // But when we got to the female dataset we had columns with 0 lived & 0 died, which threw NaN 
+    //  because we were trying to divide by 0. This makes the scales angry and they return null if we leave as-is
+    if ((d.lived + d.died) < 1) {
+      d.percentSurvived = 0;
+    }
+    else {
+      d.percentSurvived = d.lived / (d.lived + d.died);
+    }
+  }); 
+  passengersFemale.forEach(  d => {
+    if ((d.lived + d.died) < 1) {
+      d.percentSurvived = 0;
+    }
+    else {
+      d.percentSurvived = d.lived / (d.lived + d.died);
+    }
+  }); 
+  console.log(passengersMale)
+  console.log(passengersFemale)
 
-    // svg.append("text").text("Male Passengers").attr("x",10).attr("y",20).style("font-size","15px");
+  // We first put in let by mistake -- IT WILL CAUSE EXCEPTION BECAUSE WE'VE ALREADY DECLARED THE VARIABLE
+  svg = d3.select("svg#male");
+  console.log(svg)
+  width = svg.attr("width");
+  height = svg.attr("height");
+
+  svg.append("text").text("Male Passengers").attr("x",10).attr("y",20).style("font-size","15px");
 
 
+  // Let's make some new scales for this
+  // We can't re-use ageScale, because we have a different width
+  ageScale = d3.scaleLinear()
+    .domain([0,80])
+    .range([10,width-10]);
+  percentScale = d3.scaleLinear()
+    .domain([0,1])  // We manually set this since we want 0 to 100%
+    .range([height - 10,30]); 
+      // For range we're using a trick -- because the SVG coord system is "upside-down", we can configure the
+      //  scale in reverse (i.e. [max, min] instead of [min, max]) so that it "does the math" for us!
+  
+  // Let's also make a fun color scale
+  let colorScale = d3.scaleLinear()
+    .domain([0,1])
+    .range(['navy','turquoise'])   // d3 will figure out that you mean colors by this
+                                   //  the d3-interpolate module handles all of this using heuristics!
+    .interpolate(d3.interpolateHcl);  // see lecture on Color
+      
 
+  // Now make the lines
+  passengersMale.forEach((d, i) => {
+    svg.append("line")
+      .attr("x1",ageScale( d.age ))
+      .attr("x2",ageScale( d.age ))
+      .attr("y1",height - 10)  // You can tweak this to 9 so that tiny bars show up for 0s
+      .attr("y2",percentScale( d.percentSurvived ))
+      .style("stroke", colorScale( d.percentSurvived ) ) // Using the color scale now too
+      .style("stroke-width", 10);
+    svg.append("text")
+      .attr("text-anchor","middle")
+      .attr("font-size","10px")
+      .attr("x",ageScale(d.age))
+      .attr('y',percentScale( d.percentSurvived ) - 10)
+      .text(d.lived);
+  });
 
+  // Now do female side of dataset
+  // We can re-use the scales since the SVG are the same size, BUT be sure to select the new SVG
+  svg = d3.select("svg#female");
+  console.log(svg)
 
-    // svg.append("text").text("Female Passengers").attr("x",10).attr("y",20).style("font-size","15px");
-    
+  svg.append("text").text("Female Passengers").attr("x",10).attr("y",20).style("font-size","15px");
+  
+  passengersFemale.forEach((d, i) => {
+    svg.append("line")
+      .attr("x1",ageScale( d.age ))
+      .attr("x2",ageScale( d.age ))
+      .attr("y1",height - 10)
+      .attr("y2",percentScale( d.percentSurvived ))
+      .style("stroke", colorScale( d.percentSurvived ) )
+      .style("stroke-width", 10);
+    svg.append("text")
+      .attr("text-anchor","middle")
+      .attr("font-size","10px")
+      .attr("x",ageScale(d.age))
+      .attr('y',percentScale( d.percentSurvived ) - 10)
+      .text(d.lived);
+  });
+  
+  // Notice that I avoided using any SCALE puns throughout the classes.
+  //   Doing that was harder than scaling Mt Ranier, by my measure.
+  //   It's like we're stuck on the Oregon Scale.
+  //   No scalar could capture the magnitude of this challenge.
+  //   I think I need an Irish Scale Ale now...
     
     
     
