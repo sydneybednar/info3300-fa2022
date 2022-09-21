@@ -2,22 +2,22 @@
 <title>INFO 3300 - September 12</title>
 
   <link href="https://fonts.googleapis.com/css?family=Lato:400,700|Raleway:400,700" rel="stylesheet">
-  
+
   <link rel="stylesheet" type="text/css" href="../css/normalize.css">
   <link rel="stylesheet" type="text/css" href="../css/skeleton.css">
   <link rel="stylesheet" type="text/css" href="../css/custom-style.css">
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/styles/default.min.css">
   <link rel="stylesheet" href="../css/hljs-base16.css">
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.2.0/highlight.min.js"></script>
-  
+
   <script src="https://d3js.org/d3.v7.min.js"></script>
-  
+
   <style>
-  
+
   .gridlines line {
     stroke: #bbb;
   }
-  
+
   .gridlines .domain {
     stroke: none;
   }
@@ -54,80 +54,147 @@
 
   <!--- Code for today's class --->
   <script id="notes">
-  
+
     // --- 1
     //  '../datasets/titanic.json'
     console.log( '---Top of file---' );
-                  
-    
-    
+    // let promise=d3.json("../datasets/titanic.json");   // do not use .. in hw; file should b in same directory
+
+    // get 'promise' that is pending
+
+    // console.log('When will this print?');
+    // console.log(promise);
+
+    // d3.json("../datasets/titanic.json").then( (data) => {
+    //     console.log("promise was fulfilled", data);
+    // })
+
+    // all of the chart validation needs to happen inside the curly braces
+    // anything outside the curly braces will happen before the data finishes downloading
+
+    // d3.json("../datasets/titanic.json").then( (data) => {},
+    //                                           (error) => {})
+    //
+    // console.log("whe will this print? #2");
 
     // --- 2
     // Let's make a plain old scatterplot
 
     // 0. Find our SVG and get that ready
     //     We're going to use a new way of padding that makes axes easier
-    // const svg = d3.select('svg#scatterplot');
-    // const width = svg.attr('width');
-    // const height = svg.attr('height');
-    
-    
-    
-    
+    const svg = d3.select('svg#scatterplot');
+    const width = svg.attr('width');
+    const height = svg.attr('height');
+
+    const margins = {top: 10, right: 10, bottom: 50, left: 50};
+    const chartWidth = width - margins.left - margins.right;
+    const chartHeight = height - margins.top - margins.bottom;
+
+    let chartArea = svg.append("g")
+                       // .attr("transform", "translate")
+                       .attr("transform", `translate(${margins.left}, ${margins.top})`)
+
     // 1. Import some CSV data
     //        .then( function(successfulResult), function(errorMessage) )
-    
-    
-            
+    d3.csv("../datasets/gapminder.csv").then( (data) => {
+
     // 2. Check for data issues
-    
-  
+    data.forEach ( d=> {
+        d['life'] = Number(d['Life Expectancy'])
+        d['gdp'] = Number(d['GDP/Person (PPP$)'])
+        d['pop'] = Number(d['Total Population'].replace(/,/g, '')) // get rid of commas
+
+    })
+
+    data = data.filter( (d) => {return d['gdp'] !=0 && d['life'] !=0 && d['pop'] !=0
+    });
+
+    console.log(data);
+
+
 
     // 3. Let's build some scales
-    
-    
-    
-    
+
+    const gdpExtent = d3.extent(data, d => d['gdp']);
+    const gdpScale = d3.scaleLinear().domain(gdpExtent).range([0,chartWidth]);
+
+    const lifeExtent = d3.extent(data, d => d['life']);
+    const lifeScale = d3.scaleLinear().domain(lifeExtent).range([chartHeight, 0]);
+
+    const popExtent = d3.extent(data, d => d['pop']);
+    const popScale = d3.scaleLinear().domain(popExtent).range([5,10]);
+
     // 4. Start plotting circles and see what happens
-    
-    
-    
-    
-    
-    
+    data.forEach((d, i) => {
+        console.log(d);
+
+        chartArea.append("circle")
+                 .attr("cx", gdpScale(d['gdp']))
+                 .attr("cy", lifeScale(d['life']))
+                 .attr("r", popScale(d['pop']))
+                 .attr("opacity", .8)
+                 .attr("index", i)
+                 .style("fill", "steelblue");
+    });
+
     // ---- 3
     // 5. Let's add some axes
     // We're going to use D3's axis tools to do it
-    
-    
-    
-    
+
+    let leftAxis = d3.axisLeft(lifeScale) //axisRight, Top, Bottom
+    console.log(leftAxis);
+
+    let gTag= svg.append('g')
+        .attr("class", "y axis")
+        .attr("transform", `translate(${margins.left-10}, ${margins.top})`)
+
+    leftAxis(gTag);
+
+    let bottomAxis= d3.axisBottom(gdpScale).ticks(6) // ticks is a soft se
+    svg.append('g')
+        .attr("class", "x axis")
+        .attr("transform", `translate(${margins.left}, ${margins.top+chartHeight+10})`)
+        .call(bottomAxis)
+
+
     // 5A. We can manually make some gridlines
     //  It would work fine for HW4, but I don't recommend it once you start using axis labels
-    
-    
-    
+
+
+
 
     // 5B. Or we can use axes in a clever way
-    
-    
-    
-    
-    
+    let leftGridlines = d3.axisLeft(lifeScale).tickSize(-chartWidth-10).tickFormat("");
+    svg.append('g')
+      .attr('class', 'y gridlines')
+      .attr('transform',`translate(${margins.left-10},${margins.top})`)
+      .call(leftGridlines);
+
+    // need the css styling and the class assigned
+
+    let bottomGridlines= d3.axisBottom(gdpScale)
+                            .tickSize(-chartHeight-10)
+                            .tickFormat("")
+    svg.append('g')
+        .attr("class", 'gridlines')
+        .attr("transform", `translate(${margins.left}, ${margins.top+chartHeight+10})`)
+        .call(bottomGridlines);
+
+
     // Next up: filtering, legends, and advanced formatting
-    
-    
-
-  
 
 
+
+
+
+    });
   </script>
 
-  
+
 
   <!--- calls the highlight library to fill the <pre> tag with code --->
   <script>
-  
+
   function sanitize(s) {
     return s.replace("<br>", "\\n")
             .replace(/&/g, "&amp;")
