@@ -263,16 +263,42 @@
   // });
   // done with forEach
 
-  chartArea.selectAll("circle").data( data )
+    let circles = chartArea.selectAll("circle").data( data )
            .join("circle")
            .attr("cx", d => yearScale(d['year']))
            .attr("cy", d => grossScale(d['worldwide_gross']+1))
            .attr("r", d => imdbScale(d['imdb_rating']))
            .attr("opacity", 0.8)
            .attr("label", d => d["title"])
-           .style("fill", d => genreScale(d['Main_Genre']))
+           .style("fill", d => genreScale(d['Main_Genre']));
 
-    console.log(genreScale.domain());
+    circles.on("mouseover", function() { // need keyword function not arrow***
+        d3.select(this) // this is the svg that triggers the event
+          .transition()
+          .duration(200)
+          .attr("stroke", "black")
+          .attr("stroke-width", 4)
+          .style("fill", d => lighten( genreScale(d['Main Genre']) ) );
+
+        let title = d3.select(this).datum()['title'];
+        d3.select("#label").text(title);
+
+
+    })
+
+    circles.on("mouseout", function() { // need keyword function not arrow***
+        d3.select(this) // this is the svg that triggers the event
+          .transition()
+          .duration(200)
+          .attr("stroke", "none")
+          .attr("stroke-width", 4)
+          .style("fill", d => genreScale(d['Main Genre']) );
+
+        d3.select("#label").text("")
+
+
+    })
+
 
   });
 
