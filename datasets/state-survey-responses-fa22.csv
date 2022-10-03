@@ -1,53 +1,53 @@
 state_name,state_code,state_short,total
-Alabama,Alabama,Alabama,8
-Alaska,Alaska,Alaska,22
-Arizona,Arizona,Arizona,56
-Arkansas,Arkansas,Arkansas,5
-California,California,California,166
-Colorado,Colorado,Colorado,49
-Connecticut,Connecticut,Connecticut,97
-Delaware,Delaware,Delaware,53
-District of Columbia,District of Columbia,District of Columbia,116
-Florida,Florida,Florida,151
-Georgia,Georgia,Georgia,51
-Hawaii,Hawaii,Hawaii,41
-Idaho,Idaho,Idaho,15
-Illinois,Illinois,Illinois,68
-Indiana,Indiana,Indiana,30
-Iowa,Iowa,Iowa,10
-Kansas,Kansas,Kansas,11
-Kentucky,Kentucky,Kentucky,18
-Louisiana,Louisiana,Louisiana,18
-Maine,Maine,Maine,61
-Maryland,Maryland,Maryland,96
-Massachusetts,Massachusetts,Massachusetts,150
-Michigan,Michigan,Michigan,53
-Minnesota,Minnesota,Minnesota,24
-Mississippi,Mississippi,Mississippi,4
-Missouri,Missouri,Missouri,24
-Montana,Montana,Montana,18
-Nebraska,Nebraska,Nebraska,12
-Nevada,Nevada,Nevada,53
-New Hampshire,New Hampshire,New Hampshire,59
-New Jersey,New Jersey,New Jersey,151
-New Mexico,New Mexico,New Mexico,24
-New York,New York,New York,235
-North Carolina,North Carolina,North Carolina,61
-North Dakota,North Dakota,North Dakota,2
-Ohio,Ohio,Ohio,54
-Oklahoma,Oklahoma,Oklahoma,6
-Oregon,Oregon,Oregon,25
-Pennsylvania,Pennsylvania,Pennsylvania,154
-Puerto Rico,Puerto Rico,Puerto Rico,21
-Rhode Island,Rhode Island,Rhode Island,70
-South Carolina,South Carolina,South Carolina,42
-South Dakota,South Dakota,South Dakota,9
-Tennessee,Tennessee,Tennessee,31
-Texas,Texas,Texas,59
-Utah,Utah,Utah,47
-Vermont,Vermont,Vermont,56
-Virginia,Virginia,Virginia,87
-Washington,Washington,Washington,76
-West Virginia,West Virginia,West Virginia,29
-Wisconsin,Wisconsin,Wisconsin,25
-Wyoming,Wyoming,Wyoming,24
+Alabama,1,AL,9
+Alaska,2,AK,22
+Arizona,4,AZ,57
+Arkansas,5,AR,5
+California,6,CA,169
+Colorado,8,CO,50
+Connecticut,9,CT,99
+Delaware,10,DE,55
+District of Columbia,11,DC,118
+Florida,12,FL,156
+Georgia,13,GA,53
+Hawaii,15,HI,41
+Idaho,16,ID,16
+Illinois,17,IL,70
+Indiana,18,IN,31
+Iowa,19,IA,11
+Kansas,20,KS,12
+Kentucky,21,KY,19
+Louisiana,22,LA,19
+Maine,23,ME,63
+Maryland,24,MD,100
+Massachusetts,25,MA,154
+Michigan,26,MI,55
+Minnesota,27,MN,24
+Mississippi,28,MS,4
+Missouri,29,MO,24
+Montana,30,MT,19
+Nebraska,31,NE,12
+Nevada,32,NV,53
+New Hampshire,33,NH,61
+New Jersey,34,NJ,156
+New Mexico,35,NM,25
+New York,36,NY,241
+North Carolina,37,NC,63
+North Dakota,38,ND,2
+Ohio,39,OH,55
+Oklahoma,40,OK,6
+Oregon,41,OR,26
+Pennsylvania,42,PA,158
+Puerto Rico,72,PR,21
+Rhode Island,44,RI,70
+South Carolina,45,SC,43
+South Dakota,46,SD,9
+Tennessee,47,TN,32
+Texas,48,TX,62
+Utah,49,UT,48
+Vermont,50,VT,57
+Virginia,51,VA,91
+Washington,53,WA,78
+West Virginia,54,WV,29
+Wisconsin,55,WI,27
+Wyoming,56,WY,25
