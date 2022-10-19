@@ -87,7 +87,11 @@
           let point = d3.pointer(event, targetNode); // ...and painting a line from there to the new location
           //  d3.pointer will handle all of the math to figure out the right [x,y] position within targetNode
           
-          let color = d3.hsl(360 * Math.random(), 0.8, 0.7).hex() // each finger will get assigned a random color
+          //let color = d3.hsl(360 * Math.random(), 0.8, 0.7).hex() // each finger will get assigned a random color
+          
+          // BONUS: Here's a fun way to pick a random color from a d3 nominal color scheme
+          //   (in this case, we're using schemePaired but schemeCategory10 also works)
+          let color = d3.schemePaired[Math.floor(d3.schemePaired.length * Math.random())];
           
           // First step to set up the finger's gesture handlers:
           // Designate the canvas to consume all touch events from here on for this finger (even if they move beyond the canvas bounds)
