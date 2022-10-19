@@ -61,6 +61,52 @@
   context.lineWidth = 2;
   context.lineCap = "round";
 
+  canvas.on("touchmove", function(event) { event.preventDefault(); } )
+        .on("pointerup", function(event) { console.log("pointerup", event); } )
+        .on("pointerdown", function(event) {
+          console.log("pointerdown", event);
+          
+          // Every time a new pointer is put down, we need to set the canvas up to track that individual finger -- while you can make some fancy logic to do this all in one event, it's much easier to set up per-finger listeners when the finger is placed on the canvas.
+          
+          let id = event.pointerId;
+          let targetNode = event.target;
+          let prevPoint = null;
+          let point = d3.pointer(event, targetNode);
+          let color = d3.hsl(360 * Math.random(), 0.8, 0.7).hex()
+          
+          // Designate the canvas to consume all touch events from here on for this finger (even if they move beyond the canvas bounds
+          targetNode.setPointerCapture(id);
+          
+          // Make specfic events for this finger/touch
+          canvas.on(`pointerup.${id} pointercancel.${id}`, evt => {
+                  if (evt.pointerId !== id) return;  // check in case we didn't get this pointer's event
+                  
+                  // clear out the events we added for this pointer and release the event capture
+                  d3.select(targetNode).on(`.${id}`, null); 
+                  targetNode.releasePointerCapture(id);
+                
+                })
+                .on(`pointermove.${id}`, evt => {
+                  if (evt.pointerId !== id) return;  // check in case we didn't get this pointer's event
+                  prevPoint = point;
+                  point = d3.pointer(evt, targetNode);
+                  if (prevPoint) {
+                    context.beginPath();
+                    context.lineWidth = 2;
+                    context.strokeStyle = color;
+                    context.moveTo(prevPoint[0], prevPoint[1]);
+                    context.lineTo(...point);  // using ellipses let's us automatically unpack the array
+                    context.lineCap = "round";
+                    context.stroke();
+                  }
+                });
+          
+        });
+               
+          
+          
+          
+        
   
 
   </script>

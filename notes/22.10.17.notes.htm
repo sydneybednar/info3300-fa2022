@@ -235,6 +235,41 @@
 
     // 2. PAN AND ZOOM STARTS HERE
     
+    var zoom = d3.zoom()
+                 .translateExtent( [[-50,-50], [mapWidth+50, mapHeight+50]] )
+                 .scaleExtent( [1, 20] )
+                 .on("zoom", mapZoomed);
+    
+    map.call(zoom);
+    
+    viewport.select(".county-outline")
+            .attr("visibility", "hidden" );
+    viewport.selectAll(".county")
+            .attr("visibility", "hidden" );
+    
+    function mapZoomed( { transform } ) {
+    
+      console.log(transform.k);
+      
+      viewport.attr("transform", transform);
+      
+      viewport.select(".state-outline")
+              .style("stroke-width", 2 / transform.k );
+      viewport.select(".county-outline")
+              .style("stroke-width", 1 / transform.k );
+      
+      // if (transform.k > 3) {
+      //   // show the counties
+      // }
+      // else { // hide the counties }
+      
+      viewport.select(".county-outline")
+              .attr("visibility", (transform.k > 3) ? "visible" : "hidden" );
+      viewport.selectAll(".county")
+              .attr("visibility", (transform.k > 3) ? "visible" : "hidden" );
+      
+        
+    }
     
     
 
