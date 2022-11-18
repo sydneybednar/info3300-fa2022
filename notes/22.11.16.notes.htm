@@ -55,12 +55,19 @@
 
   <script id="notes1">
   
-  // Some helper variables for you to use -- do not modify or helper functions will fail
+  // Observe in the HTML that we have a <canvas> nested INSIDE OF a <svg> using <foreignObject>
+  // These elements allow you add plain HTML code into an SVG, but they are risky to use.
+  // Here we use it so that we can put a brush <g> tag right on top of the canvas.
+  // The method from 11-14 would also work fine here.
+  
+  // Some helper variables to get the canvas going
   var canvas = d3.select("#painting");
   var gfxContext = canvas.node().getContext("2d");
   var imgWidth = canvas.node().width;
   var imgHeight = canvas.node().height;
-
+  
+  // Programmatically define an image to start loading it
+  // This is old JS stuff, so we use .onload to trigger a function once img loads
   var img = new Image;
   img.src = "../datasets/CMA.1921.1239.png"
   img.onload = imgLoaded;
@@ -69,6 +76,64 @@
     
     gfxContext.drawImage(this, 0, 0); // Paint image to canvas
     
+    // It's easier to extract pixels from canvas than to extract from Image object
+    let pixels = gfxContext.getImageData(0,0,imgWidth,imgHeight).data;
+    
+    // Define a brush and paste it into the <g> tag
+    let brush = d3.brush()
+                  .extent([ [0,0],[imgWidth,imgHeight] ])
+                  .on("brush end", imageBrushed);
+    d3.select("#brush").call(brush);
+
+    // Here is a more complex example of destructuring
+    // Because we know the brush gives imageBrushed() an event object, we can take it
+    //  apart right in the function signature. Here we break the selection key
+    //  into four variables since we know exactly the format it comes to us in
+    function imageBrushed( { selection: [[xStart, yStart], [xEnd, yEnd]] }  ) {
+      
+      // Base case -- nothing selected
+      if (event.selection === null) {
+        d3.select("#color").attr("fill", "white");
+        return;
+      }
+      
+      // Otherwise start gathering the colors to average
+      // We'll keep a running total of L, A, and B (lab colors make nicer average colors)
+      let n = 0, l = 0, a = 0, b = 0;
+      
+      // Iterate through brush region
+      for (let x=Math.floor(xStart); x<xEnd; x++) {
+        for (let y=Math.floor(yStart); y<yEnd; y++) {
+          
+          // Compute the proper location in the image data 1-d array
+          let pixelPos = ((y * imgWidth) + x) * 4;
+          
+          // Get a lab color
+          // First we take out the R, G, and B, then put them into a d3.rgb
+          // d3.lab can do the conversion for us if we give it a d3.rgb object
+          let lab = d3.lab( d3.rgb(pixels[pixelPos],pixels[pixelPos+1],pixels[pixelPos+2]) );
+
+          // Keep running totals using our color
+          l += lab.l;
+          a += lab.a;
+          b += lab.b;
+          n++;
+        }
+      }
+      
+      // Compute the mean
+      let avg = d3.lab(l/n, a/n, b/n);
+
+      // Fill in the rect, set the label
+      d3.select("#color").attr("fill", avg.hex());
+      d3.select("#label").text( d3.rgb(avg).hex() );
+
+      // This is a fun trick. We use black text if the color is light (l > 50) and white text
+      //  if the color is dark so that you can always read the label
+      d3.select("#label").attr("fill", (avg.l > 50) ? "black" : "white" )
+
+    }
+
   }
 
   
