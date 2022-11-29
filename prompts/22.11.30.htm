@@ -74,8 +74,6 @@
   let linkGroup = svg.append("g").attr("class","links")
   let nodeGroup = svg.append("g").attr("class","nodes")
 
-  let width = svg.attr("width");
-  
   // // Make a hidden SVG to use for measuring
   // // (we'll use this in the FlexTree part of the lecture)
   // let virtualText = d3.select("body").append("svg").attr("width",0).attr("height",0)
@@ -98,7 +96,7 @@
 
   }
   
-  updateChart(root);
+  updateChart();
   
   
   
