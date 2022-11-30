@@ -62,8 +62,8 @@
   // This code is a worked version of the canonical d3 example at https://observablehq.com/@d3/collapsible-tree
   const createVis = async () => {
     
-  dataset = await d3.json("../datasets/phantom.json", d3.autoType )   // A surprise to be sure, but a welcome one
-  // dataset = await d3.json("../datasets/astley.json", d3.autoType )   //  See https://youtu.be/dQw4w9WgXcQ
+  // dataset = await d3.json("../datasets/phantom.json", d3.autoType )   // A surprise to be sure, but a welcome one
+  dataset = await d3.json("../datasets/astley.json", d3.autoType )   //  See https://youtu.be/dQw4w9WgXcQ
   console.log(dataset);
   
   let svg = d3.select("svg#plot");
